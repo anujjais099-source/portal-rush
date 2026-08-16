@@ -83,6 +83,24 @@ For local development with auto-restart on file changes:
 npm run dev
 ```
 
+## Deploying it publicly
+
+Portal Rush is a plain, stateful Node.js server (Express + Socket.io) — it needs a host that keeps a process running and supports WebSockets, so serverless/static hosts (Vercel, Netlify, GitHub Pages) won't work. [Render](https://render.com) is the easiest fit: free tier, native Node support, WebSockets work out of the box, and this repo already includes a `render.yaml` blueprint.
+
+1. **Push this repo to GitHub** (create an empty repo at github.com/new, then from this folder):
+   ```bash
+   git remote add origin https://github.com/YOUR_USERNAME/portal-rush.git
+   git branch -M main
+   git push -u origin main
+   ```
+2. **On Render**: New → Blueprint → connect the GitHub repo → Render reads `render.yaml` and provisions it automatically (build `npm install`, start `npm start`). First deploy takes a couple of minutes.
+3. Render gives you a public URL like `https://portal-rush.onrender.com` — that's your live game.
+
+**Know before you deploy:**
+- The free plan spins the service down after 15 minutes of inactivity; the first request after that takes ~30–60s to wake it back up.
+- The free plan's disk is **ephemeral** — `database/data/*.json` (player profiles, leaderboard) resets on every redeploy or restart. For a permanent leaderboard, either add a Render persistent disk mounted at `database/data` (paid), or swap `database/db.js` for a hosted database later — its read/update/query surface is small and isolated on purpose.
+- Any other Node host works the same way (Railway, Fly.io, a VPS): `npm install && npm start`, with `PORT` read from the environment already.
+
 ## Gameplay systems
 
 - **Endless runner mechanics**: fixed-lane side view, jump/slide/double-jump/dash, escalating scroll speed, obstacle density that scales both within a run and across difficulty "loops."
