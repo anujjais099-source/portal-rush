@@ -1,0 +1,7 @@
+node_modules/
+server.log
+npm-debug.log*
+
+# Runtime player data — the server recreates empty {}./[] files automatically
+# on first boot, so real player profiles never get committed to the repo.
+database/data/*.json

@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>PORTAL RUSH — One Run. Endless Worlds.</title>
+<link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- ============================== APP SHELL (sidebar + pages) ============================== -->
+  <div id="shell" class="shell active">
+    <aside id="sidebar">
+      <div class="sidebar-brand">
+        <canvas id="sidebar-logo-canvas" width="40" height="40"></canvas>
+        <span class="sidebar-logo-text">PORTAL<br />RUSH</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-page="page-home"><span class="nav-icon">▶</span>Play</button>
+        <button class="nav-item" data-page="page-character"><span class="nav-icon">🧑‍🚀</span>Character</button>
+        <button class="nav-item" data-page="page-worlds"><span class="nav-icon">🌍</span>Worlds</button>
+        <button class="nav-item" data-page="page-multiplayer"><span class="nav-icon">👥</span>Multiplayer</button>
+        <button class="nav-item" data-page="page-shop"><span class="nav-icon">🛒</span>Shop</button>
+        <button class="nav-item" data-page="page-leaderboard"><span class="nav-icon">🏆</span>Leaderboard</button>
+        <button class="nav-item" data-page="page-stats"><span class="nav-icon">📊</span>Statistics</button>
+        <button class="nav-item" data-page="page-settings"><span class="nav-icon">⚙</span>Settings</button>
+      </nav>
+
+      <div class="sidebar-profile">
+        <div class="sidebar-profile-row">
+          <span class="sidebar-avatar">🙂</span>
+          <div class="sidebar-profile-info">
+            <div class="sidebar-profile-name-row">
+              <span id="title-player-name" class="sidebar-profile-name">—</span>
+              <button id="btn-rename" class="icon-btn icon-btn-tiny" title="Rename">✎</button>
+            </div>
+            <div class="sidebar-profile-level">Lv. <span id="title-level">1</span></div>
+          </div>
+        </div>
+        <div class="xp-bar"><div id="xp-bar-fill" class="xp-bar-fill" style="width:0%"></div></div>
+        <div class="sidebar-currencies">
+          <span class="currency">🪙 <span id="title-coins">0</span></span>
+          <span class="currency">💎 <span id="title-gems">0</span></span>
+          <span class="currency">⭐ <span id="title-stars">0</span></span>
+        </div>
+      </div>
+    </aside>
+
+    <main id="main-content">
+
+      <!-- ------------------------------ HOME / PLAY ------------------------------ -->
+      <section id="page-home" class="page active">
+        <header class="page-topbar">
+          <h2>Choose Your Run</h2>
+        </header>
+
+        <div class="home-grid">
+          <div class="home-col-left">
+            <div id="mode-list" class="mode-list"></div>
+            <button id="btn-play-solo" class="btn btn-primary btn-play-now">PLAY NOW →</button>
+          </div>
+
+          <div class="home-hero">
+            <canvas id="hero-canvas" width="480" height="440"></canvas>
+          </div>
+
+          <div class="home-col-right">
+            <section class="panel">
+              <h3 class="panel-title">Your Stats</h3>
+              <div class="stat-row"><span>🏆 Best Score</span><span id="stat-highest-score">0</span></div>
+              <div class="stat-row"><span>🔁 Total Runs</span><span id="stat-total-runs">0</span></div>
+              <div class="stat-row"><span>🌍 Worlds Unlocked</span><span id="stat-worlds-unlocked">0 / 0</span></div>
+            </section>
+
+            <section class="panel">
+              <h3 class="panel-title">Daily Challenge</h3>
+              <div id="daily-challenge" class="quest-item"></div>
+            </section>
+
+            <section class="panel">
+              <h3 class="panel-title">What's New</h3>
+              <div class="whats-new-item">
+                <strong>New Worlds: Volcano &amp; Snow</strong>
+                <span>Lava rivers and frozen peaks now live.</span>
+              </div>
+              <div class="whats-new-item">
+                <strong>16 Characters to Unlock</strong>
+                <span>Firefighter, Ninja, Astronaut and more join the roster.</span>
+              </div>
+              <div class="whats-new-item">
+                <strong>Gems, Keys &amp; Mystery Boxes</strong>
+                <span>New collectibles, plus a Shop to exchange gems for coins.</span>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <section class="panel">
+          <h3 class="panel-title">World Preview</h3>
+          <div id="world-preview-list" class="world-preview-row"></div>
+        </section>
+      </section>
+
+      <!-- ------------------------------ CHARACTER ------------------------------ -->
+      <section id="page-character" class="page">
+        <header class="page-topbar"><h2>Character</h2></header>
+        <div class="panel">
+          <div id="character-grid" class="character-grid"></div>
+        </div>
+      </section>
+
+      <!-- ------------------------------ WORLDS ------------------------------ -->
+      <section id="page-worlds" class="page">
+        <header class="page-topbar"><h2>Worlds</h2></header>
+        <div class="panel">
+          <div id="world-grid" class="world-grid"></div>
+        </div>
+      </section>
+
+      <!-- ------------------------------ MULTIPLAYER ------------------------------ -->
+      <section id="page-multiplayer" class="page">
+        <header class="page-topbar"><h2>Multiplayer</h2></header>
+        <div class="panel">
+          <label class="field-label" for="mp-name-input">Display name</label>
+          <input id="mp-name-input" class="text-input" maxlength="16" placeholder="Your name" />
+
+          <div class="mp-actions">
+            <button id="btn-create-room" class="btn btn-primary">Create Room</button>
+            <div class="join-row">
+              <input id="mp-code-input" class="text-input code-input" maxlength="4" placeholder="CODE" />
+              <button id="btn-join-room" class="btn">Join</button>
+            </div>
+          </div>
+          <p id="mp-error" class="error-text" hidden></p>
+        </div>
+      </section>
+
+      <!-- ------------------------------ ROOM ------------------------------ -->
+      <section id="page-room" class="page">
+        <header class="page-topbar">
+          <h2>Room <span id="room-code">----</span></h2>
+          <button id="btn-leave-room" class="btn btn-danger">Leave Room</button>
+        </header>
+
+        <div class="panel">
+          <ul id="room-member-list" class="member-list"></ul>
+          <div class="room-actions">
+            <button id="btn-ready" class="btn btn-primary">Ready</button>
+            <button id="btn-start-race" class="btn btn-accent" hidden>Start Race</button>
+          </div>
+          <p class="hint">Share the room code with friends so they can join.</p>
+        </div>
+
+        <div class="panel chat-panel">
+          <div id="chat-log" class="chat-log"></div>
+          <form id="chat-form" class="chat-form">
+            <input id="chat-input" class="text-input" maxlength="200" placeholder="Say something…" autocomplete="off" />
+            <button class="btn" type="submit">Send</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- ------------------------------ SHOP ------------------------------ -->
+      <section id="page-shop" class="page">
+        <header class="page-topbar">
+          <h2>Shop</h2>
+          <span class="coin-pill">🪙 <span id="shop-coins">0</span></span>
+        </header>
+
+        <div class="panel">
+          <h3 class="panel-title">Gem Exchange</h3>
+          <div class="exchange-row">
+            <span>💎 <span id="shop-gems">0</span> gems available</span>
+            <button id="btn-exchange-gems" class="btn btn-primary">Exchange 1 💎 → 20 🪙</button>
+          </div>
+          <p class="hint">Gems are found as rare pickups and mystery box rewards during runs.</p>
+        </div>
+
+        <div class="panel">
+          <h3 class="panel-title">Characters</h3>
+          <div id="shop-character-grid" class="character-grid"></div>
+        </div>
+      </section>
+
+      <!-- ------------------------------ LEADERBOARD ------------------------------ -->
+      <section id="page-leaderboard" class="page">
+        <header class="page-topbar"><h2>Leaderboard</h2></header>
+        <div class="panel">
+          <div class="leaderboard-tabs">
+            <button class="tab-btn active" data-range="daily">Daily</button>
+            <button class="tab-btn" data-range="weekly">Weekly</button>
+            <button class="tab-btn" data-range="all">All-Time</button>
+          </div>
+          <ol id="leaderboard-list" class="standings-list leaderboard-list"></ol>
+        </div>
+
+        <div class="panel">
+          <h3 class="panel-title">Daily Quests</h3>
+          <div id="quest-list" class="quest-list"></div>
+        </div>
+
+        <div class="panel">
+          <h3 class="panel-title">Achievements</h3>
+          <div id="achievement-list" class="quest-list"></div>
+        </div>
+      </section>
+
+      <!-- ------------------------------ STATISTICS ------------------------------ -->
+      <section id="page-stats" class="page">
+        <header class="page-topbar"><h2>Statistics</h2></header>
+        <div id="stats-grid" class="stats-grid"></div>
+      </section>
+
+      <!-- ------------------------------ SETTINGS ------------------------------ -->
+      <section id="page-settings" class="page">
+        <header class="page-topbar"><h2>Settings</h2></header>
+        <div class="panel">
+          <label class="field-label">SFX Volume</label>
+          <input id="setting-sfx" type="range" min="0" max="1" step="0.05" class="slider" />
+
+          <label class="field-label">Music Volume</label>
+          <input id="setting-music" type="range" min="0" max="1" step="0.05" class="slider" />
+
+          <label class="toggle-row"><input id="setting-mute" type="checkbox" /> Mute all audio</label>
+          <label class="toggle-row"><input id="setting-motion" type="checkbox" /> Reduce screen shake / flashes</label>
+        </div>
+
+        <div class="panel">
+          <h3 class="panel-title">Power-Ups Reference</h3>
+          <div class="powerup-info-row">
+            <div class="powerup-info"><span class="powerup-info-icon" style="background:#3dffb0">&gt;&gt;</span>Speed Boost</div>
+            <div class="powerup-info"><span class="powerup-info-icon" style="background:#4fd1ff">S</span>Shield</div>
+            <div class="powerup-info"><span class="powerup-info-icon" style="background:#ff5da2">M</span>Magnet</div>
+            <div class="powerup-info"><span class="powerup-info-icon" style="background:#ff8a3d">J</span>Jetpack</div>
+            <div class="powerup-info"><span class="powerup-info-icon" style="background:#ffd83d;color:#0b0730">x2</span>Double Coin</div>
+            <div class="powerup-info"><span class="powerup-info-icon" style="background:#b46bff">★</span>Invincible</div>
+            <div class="powerup-info"><span class="powerup-info-icon" style="background:#5da9ff">◷</span>Slow Motion</div>
+          </div>
+          <h3 class="panel-title" style="margin-top:16px">How To Play</h3>
+          <div class="howto-row">
+            <div class="howto-item"><span class="howto-icon">⬆</span>Jump</div>
+            <div class="howto-item"><span class="howto-icon">⬇</span>Slide</div>
+            <div class="howto-item"><span class="howto-icon">⏫</span>Double Jump</div>
+            <div class="howto-item"><span class="howto-icon">⇒</span>Dash</div>
+          </div>
+          <p class="hint">Space/↑ jump (press again mid-air to double jump) · ↓ slide · Shift dash · P pause</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- =============================== GAME (fullscreen, no sidebar) ================================ -->
+  <section id="screen-game" class="screen">
+    <div id="game-stage">
+      <canvas id="game-canvas" width="960" height="540"></canvas>
+
+      <div id="hud" class="hud">
+        <div class="hud-top-left">
+          <div class="hud-score">Score <span id="hud-score">0</span></div>
+          <div class="hud-row">
+            <span class="hud-coins">🪙 <span id="hud-coins">0</span></span>
+            <span class="hud-coins">💎 <span id="hud-gems">0</span></span>
+            <span class="hud-coins">🔑 <span id="hud-keys">0</span></span>
+            <span class="hud-distance"><span id="hud-distance">0</span>m</span>
+          </div>
+          <div class="hud-world" id="hud-world">Day Mode</div>
+          <div id="hud-powerups" class="hud-powerups"></div>
+        </div>
+        <button id="btn-pause" class="icon-btn hud-pause" title="Pause">❚❚</button>
+      </div>
+
+      <div id="mp-sidebar" class="mp-sidebar" hidden>
+        <h3>Live Standings</h3>
+        <ol id="mp-standings" class="standings-list"></ol>
+      </div>
+
+      <div id="touch-controls" class="touch-controls">
+        <button id="btn-touch-slide" class="touch-btn">⬇</button>
+        <button id="btn-touch-dash" class="touch-btn touch-btn-dash">⇒</button>
+        <button id="btn-touch-jump" class="touch-btn">⬆</button>
+      </div>
+
+      <!-- Pause overlay -->
+      <div id="overlay-pause" class="overlay" hidden>
+        <div class="overlay-card">
+          <h2>Paused</h2>
+          <button id="btn-resume" class="btn btn-primary">Resume</button>
+          <button id="btn-restart" class="btn">Restart</button>
+          <button id="btn-quit" class="btn btn-danger">Quit to Menu</button>
+        </div>
+      </div>
+
+      <!-- Game over overlay (solo, or a multiplayer racer that died early) -->
+      <div id="overlay-gameover" class="overlay" hidden>
+        <div class="overlay-card">
+          <h2 id="gameover-title">Run Over</h2>
+          <canvas id="gameover-celebrate" width="90" height="80" class="celebrate-canvas" hidden></canvas>
+          <p id="gameover-newbest" class="new-best" hidden>✨ New Best Score!</p>
+          <div class="stat-grid">
+            <div><span class="stat-label">Score</span><span id="go-score" class="stat-value">0</span></div>
+            <div><span class="stat-label">Distance</span><span id="go-distance" class="stat-value">0m</span></div>
+            <div><span class="stat-label">Coins</span><span id="go-coins" class="stat-value">0</span></div>
+          </div>
+          <div id="go-rewards" class="go-rewards"></div>
+          <p id="gameover-waiting" class="hint" hidden>Waiting for other racers to finish…</p>
+          <div id="gameover-actions">
+            <button id="btn-retry" class="btn btn-primary">Retry</button>
+            <button id="btn-gameover-menu" class="btn">Menu</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Multiplayer race results overlay -->
+      <div id="overlay-results" class="overlay" hidden>
+        <div class="overlay-card">
+          <h2>Race Results</h2>
+          <ol id="results-list" class="standings-list results-list"></ol>
+          <div>
+            <button id="btn-results-again" class="btn btn-primary">Back to Room</button>
+            <button id="btn-results-menu" class="btn">Menu</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Countdown overlay -->
+      <div id="overlay-countdown" class="overlay" hidden>
+        <div class="countdown-number" id="countdown-number">3</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/characters/characterConfig.js"></script>
+<script src="/worlds/worldConfig.js"></script>
+<script type="module" src="/main.js"></script>
+</body>
+</html>
