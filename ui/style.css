@@ -464,14 +464,45 @@ html, body {
 .standings-list li.self { color: var(--accent); font-weight: 700; }
 .standings-list li.dead { opacity: 0.45; text-decoration: line-through; }
 
+.rotate-hint {
+  display: none;
+  position: absolute;
+  top: calc(10px + env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(3,4,12,0.75);
+  border: 1px solid var(--panel-border);
+  color: var(--text);
+  font-size: 0.72rem;
+  padding: 6px 14px;
+  border-radius: 999px;
+  z-index: 6;
+  pointer-events: none;
+  white-space: nowrap;
+}
+@media (orientation: portrait) and (pointer: coarse) {
+  .rotate-hint { display: block; }
+}
+
 .touch-controls {
   position: absolute;
-  bottom: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
   left: 0; right: 0;
   display: flex;
   justify-content: space-between;
   padding: 0 24px;
   pointer-events: none;
+  z-index: 5;
+}
+
+@media (max-width: 480px) {
+  .touch-btn { width: 58px; height: 58px; font-size: 1.2rem; }
+  .touch-controls { padding: 0 14px; }
+  .hud { padding: 10px; }
+  .hud-score { font-size: 1.1rem; }
+  .hud-row { font-size: 0.8rem; gap: 8px; }
+  .hud-world { font-size: 0.68rem; }
+  .mp-sidebar { width: 130px; padding: 8px; font-size: 0.7rem; }
 }
 .touch-btn {
   pointer-events: auto;
@@ -482,6 +513,9 @@ html, body {
   color: var(--text);
   font-size: 1.4rem;
   -webkit-user-select: none; user-select: none;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
 }
 
 .overlay {
