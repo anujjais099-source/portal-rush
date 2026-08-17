@@ -132,6 +132,19 @@ const roomManager = new RoomManager();
 const sessionRegistry = new SessionRegistry();
 registerSocketHandlers(io, { roomManager, sessionRegistry, db });
 
+// How many people are live right now: every open tab holds a Socket.io connection
+// (menus.js connects on load, not just when opening Multiplayer), so this is a
+// real concurrent-visitor count, not just people actively racing.
+app.get('/api/live-stats', (req, res) => {
+  const rooms = [...roomManager.rooms.values()];
+  res.json({
+    online: io.engine.clientsCount,
+    activeRooms: rooms.length,
+    playersInRooms: rooms.reduce((sum, r) => sum + r.size, 0),
+    racingNow: rooms.filter((r) => r.state === 'racing').length,
+  });
+});
+
 server.listen(PORT, () => {
   console.log(`PORTAL RUSH server running at http://localhost:${PORT}`);
 });
