@@ -30,10 +30,39 @@ export class AudioEngine {
     this.master.gain.value = this.settings.muted ? 0 : 1;
   }
 
-  /** Must be called from a user gesture (button click) to satisfy autoplay policies. */
+  /**
+   * Must be called from a user gesture to satisfy mobile autoplay policies.
+   *
+   * Mobile browsers (iOS Safari especially) need more than a bare resume():
+   * the context has to be created *and* fed a sound from inside the gesture
+   * before it will actually produce audio. Returns true once the context is
+   * confirmed running, so callers can keep retrying on later gestures instead
+   * of giving up after one failed attempt.
+   */
   unlock() {
     this._ensureContext();
+
+    // Priming with a silent one-sample buffer is what actually flips iOS out
+    // of its muted state; resume() alone is not reliable there.
+    try {
+      const buf = this.ctx.createBuffer(1, 1, 22050);
+      const src = this.ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(this.ctx.destination);
+      src.start(0);
+    } catch (err) { /* priming is best-effort */ }
+
     if (this.ctx.state === 'suspended') this.ctx.resume();
+    return this.ctx.state === 'running';
+  }
+
+  /**
+   * Re-resumes after the OS suspends the context — happens every time a phone
+   * user backgrounds the tab, takes a call, or locks the screen. Without this
+   * audio silently dies for the rest of the session.
+   */
+  resumeIfSuspended() {
+    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
   }
 
   setSfxVolume(v) {
@@ -53,6 +82,7 @@ export class AudioEngine {
 
   _tone({ freq, duration, type = 'sine', gain = 0.22, slideTo = null, delay = 0 }) {
     if (!this.ctx) return;
+    this.resumeIfSuspended();
     const t0 = this.ctx.currentTime + delay;
     const osc = this.ctx.createOscillator();
     const g = this.ctx.createGain();
@@ -70,6 +100,7 @@ export class AudioEngine {
 
   _noise({ duration, gain = 0.18, delay = 0 }) {
     if (!this.ctx) return;
+    this.resumeIfSuspended();
     const t0 = this.ctx.currentTime + delay;
     const bufferSize = this.ctx.sampleRate * duration;
     const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
@@ -129,6 +160,7 @@ export class AudioEngine {
   /** Soft ambient drone loop; recolored per-world by `hue` (a base frequency). */
   startMusic(baseFreq = 110) {
     this._ensureContext();
+    this.resumeIfSuspended();
     this.stopMusic();
     const osc1 = this.ctx.createOscillator();
     const osc2 = this.ctx.createOscillator();

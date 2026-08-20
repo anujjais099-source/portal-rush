@@ -495,19 +495,35 @@ export class Engine {
       for (let i = -1; i < 6; i++) {
         const px = i * 220 - peakOffset;
         const ph = 90 + ((i * 41) % 70);
-        ctx.fillStyle = '#1e0a06';
+        // Lit rock face rather than a near-black silhouette, so Volcano carries
+        // the same amount of visible detail as the other worlds' skylines.
+        const rock = ctx.createLinearGradient(px, GROUND_Y - ph, px, GROUND_Y);
+        rock.addColorStop(0, '#6b2410');
+        rock.addColorStop(0.55, '#42150a');
+        rock.addColorStop(1, '#2a0e08');
+        ctx.fillStyle = rock;
         ctx.beginPath();
         ctx.moveTo(px, GROUND_Y);
         ctx.lineTo(px + 60, GROUND_Y - ph);
         ctx.lineTo(px + 120, GROUND_Y);
         ctx.closePath();
         ctx.fill();
+
+        // Glowing crater cap + two branching lava veins.
+        const pulse = 0.7 + Math.sin(this.player.animClock * 3 + i) * 0.25;
+        ctx.globalAlpha = pulse;
+        ctx.fillStyle = '#ffb703';
+        ctx.beginPath();
+        ctx.ellipse(px + 60, GROUND_Y - ph + 3, 11, 4, 0, 0, Math.PI * 2);
+        ctx.fill();
         ctx.strokeStyle = '#ff6a1a';
-        ctx.globalAlpha = 0.7 + Math.sin(this.player.animClock * 3 + i) * 0.2;
         ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.moveTo(px + 60, GROUND_Y - ph);
         ctx.lineTo(px + 45, GROUND_Y - ph * 0.4);
+        ctx.moveTo(px + 60, GROUND_Y - ph);
+        ctx.lineTo(px + 76, GROUND_Y - ph * 0.55);
+        ctx.lineTo(px + 71, GROUND_Y - ph * 0.18);
         ctx.stroke();
         ctx.globalAlpha = 1;
         ctx.fillStyle = 'rgba(60,50,50,0.3)';

@@ -84,13 +84,25 @@ document.querySelectorAll('.nav-item[data-page]').forEach((btn) => {
 
 // ------------------------------------------------------------ first-gesture audio unlock
 
-function unlockAudioOnce() {
-  audio.unlock();
-  window.removeEventListener('pointerdown', unlockAudioOnce);
-  window.removeEventListener('keydown', unlockAudioOnce);
+// Mobile browsers only allow audio to start from a real user gesture, and the
+// first gesture doesn't always succeed. Keep listening across several event
+// types until the context actually reports "running", then detach — giving up
+// after one failed attempt is why phones ended up with no sound at all.
+const UNLOCK_EVENTS = ['pointerdown', 'touchend', 'click', 'keydown'];
+
+function tryUnlockAudio() {
+  if (audio.unlock()) {
+    UNLOCK_EVENTS.forEach((evt) => window.removeEventListener(evt, tryUnlockAudio));
+  }
 }
-window.addEventListener('pointerdown', unlockAudioOnce);
-window.addEventListener('keydown', unlockAudioOnce);
+UNLOCK_EVENTS.forEach((evt) => window.addEventListener(evt, tryUnlockAudio, { passive: true }));
+
+// Phones suspend the audio context whenever the tab is backgrounded (call,
+// lock screen, app switch). Resume on return or the rest of the session is mute.
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) audio.resumeIfSuspended();
+});
+window.addEventListener('focus', () => audio.resumeIfSuspended());
 
 // ------------------------------------------------------------------- profile
 
@@ -768,9 +780,26 @@ function quitToMenu() {
 
 // touch controls
 
-document.getElementById('btn-touch-jump').addEventListener('pointerdown', (e) => { e.preventDefault(); engine && engine.handleJump(); });
-document.getElementById('btn-touch-slide').addEventListener('pointerdown', (e) => { e.preventDefault(); engine && engine.handleSlide(); });
-document.getElementById('btn-touch-dash').addEventListener('pointerdown', (e) => { e.preventDefault(); engine && engine.handleDash(); });
+// Touch controls are Jump and Slide only. Dash stays on keyboard (Shift / F) —
+// three buttons crowded the small-screen layout and read ambiguously.
+// `touchstart` is bound alongside `pointerdown` because some mobile browsers
+// fire only one of the two; a flag stops a double-trigger where both arrive.
+function bindTouchControl(id, action) {
+  const el = document.getElementById(id);
+  let handledAt = 0;
+  const fire = (e) => {
+    e.preventDefault();
+    const now = performance.now();
+    if (now - handledAt < 80) return; // same physical tap arriving twice
+    handledAt = now;
+    if (engine) action();
+  };
+  el.addEventListener('pointerdown', fire);
+  el.addEventListener('touchstart', fire, { passive: false });
+}
+
+bindTouchControl('btn-touch-jump', () => engine.handleJump());
+bindTouchControl('btn-touch-slide', () => engine.handleSlide());
 
 // ------------------------------------------------------------------ multiplayer
 

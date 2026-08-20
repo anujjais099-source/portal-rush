@@ -169,7 +169,7 @@ function drawAccessory(ctx, look, headY, headR, bodyTop, bw) {
   ctx.strokeStyle = trim || '#ffffff';
   switch (accessory) {
     case 'cap':
-      roundRect(ctx, 4 - headR, headY - headR - 2, headR * 2.1, headR * 0.8, 3);
+      roundRect(ctx, 4 - headR, headY - headR * 0.94, headR * 2.1, headR * 0.76, 3);
       ctx.fill();
       roundRect(ctx, 4 - headR * 0.3, headY - headR * 0.3, headR * 1.5, headR * 0.35, 2);
       ctx.fill();
@@ -193,21 +193,21 @@ function drawAccessory(ctx, look, headY, headR, bodyTop, bw) {
       break;
     case 'strawhat':
       ctx.beginPath();
-      ctx.ellipse(4, headY - headR * 1.1, headR * 1.9, headR * 0.5, 0, 0, Math.PI * 2);
+      ctx.ellipse(4, headY - headR * 0.72, headR * 1.4, headR * 0.4, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.beginPath();
-      ctx.moveTo(4 - headR * 0.7, headY - headR * 1.1);
-      ctx.lineTo(4 + headR * 0.7, headY - headR * 1.1);
-      ctx.lineTo(4 + headR * 0.4, headY - headR * 2.1);
-      ctx.lineTo(4 - headR * 0.4, headY - headR * 2.1);
+      ctx.moveTo(4 - headR * 0.62, headY - headR * 0.72);
+      ctx.lineTo(4 + headR * 0.62, headY - headR * 0.72);
+      ctx.lineTo(4 + headR * 0.36, headY - headR * 1.12);
+      ctx.lineTo(4 - headR * 0.36, headY - headR * 1.12);
       ctx.closePath();
       ctx.fill();
       break;
     case 'hardhat':
       ctx.beginPath();
-      ctx.arc(4, headY - headR * 0.2, headR * 1.05, Math.PI, 0);
+      ctx.arc(4, headY - headR * 0.1, headR * 1.0, Math.PI, 0);
       ctx.fill();
-      roundRect(ctx, 4 - headR * 1.1, headY - headR * 0.25, headR * 2.2, headR * 0.25, 2);
+      roundRect(ctx, 4 - headR * 1.04, headY - headR * 0.16, headR * 2.08, headR * 0.22, 2);
       ctx.fill();
       break;
     case 'stethoscope':
@@ -222,9 +222,9 @@ function drawAccessory(ctx, look, headY, headR, bodyTop, bw) {
       break;
     case 'firehelmet':
       ctx.beginPath();
-      ctx.arc(4, headY - headR * 0.15, headR * 1.1, Math.PI, 0);
+      ctx.arc(4, headY - headR * 0.08, headR * 1.02, Math.PI, 0);
       ctx.fill();
-      roundRect(ctx, 4 - headR * 1.2, headY - headR * 0.2, headR * 2.4, headR * 0.3, 3);
+      roundRect(ctx, 4 - headR * 1.08, headY - headR * 0.14, headR * 2.16, headR * 0.26, 3);
       ctx.fill();
       ctx.fillStyle = '#ffe066';
       ctx.beginPath();
@@ -251,13 +251,13 @@ function drawAccessory(ctx, look, headY, headR, bodyTop, bw) {
       break;
     case 'militaryhelmet':
       ctx.beginPath();
-      ctx.arc(4, headY - headR * 0.15, headR * 1.15, Math.PI * 0.95, Math.PI * 2.05);
+      ctx.arc(4, headY - headR * 0.08, headR * 1.05, Math.PI * 0.95, Math.PI * 2.05);
       ctx.fill();
-      roundRect(ctx, 4 - headR * 1.15, headY - headR * 0.25, headR * 2.3, headR * 0.25, 2);
+      roundRect(ctx, 4 - headR * 1.05, headY - headR * 0.2, headR * 2.1, headR * 0.22, 2);
       ctx.fill();
       break;
     case 'ninjahood':
-      roundRect(ctx, 4 - headR * 1.05, headY - headR * 1.2, headR * 2.1, headR * 1.5, headR * 0.6);
+      roundRect(ctx, 4 - headR * 1.02, headY - headR * 1.06, headR * 2.04, headR * 1.36, headR * 0.58);
       ctx.fill();
       ctx.fillStyle = '#0b0730';
       roundRect(ctx, 4 - headR * 0.9, headY - headR * 0.2, headR * 1.8, headR * 0.4, 2);
@@ -266,17 +266,17 @@ function drawAccessory(ctx, look, headY, headR, bodyTop, bw) {
     case 'spacehelmet':
       ctx.fillStyle = 'rgba(190,230,255,0.5)';
       ctx.beginPath();
-      ctx.arc(4, headY, headR * 1.35, 0, Math.PI * 2);
+      ctx.arc(4, headY, headR * 1.04, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = trim || '#ffffff';
-      ctx.lineWidth = 3;
+      ctx.lineWidth = 2;
       ctx.stroke();
       break;
     case 'ponytail':
       ctx.beginPath();
-      ctx.moveTo(4 + headR * 0.85, headY - headR * 0.3);
-      ctx.quadraticCurveTo(4 + headR * 1.9, headY, 4 + headR * 1.3, headY + headR * 1.4);
-      ctx.quadraticCurveTo(4 + headR * 1.0, headY + headR * 0.6, 4 + headR * 0.6, headY);
+      ctx.moveTo(4 + headR * 0.82, headY - headR * 0.3);
+      ctx.quadraticCurveTo(4 + headR * 1.55, headY, 4 + headR * 1.12, headY + headR * 1.32);
+      ctx.quadraticCurveTo(4 + headR * 0.9, headY + headR * 0.58, 4 + headR * 0.58, headY);
       ctx.closePath();
       ctx.fill();
       break;
@@ -691,6 +691,21 @@ export function drawAmbientLayer(ctx, ambient, distance, t, width, skyBottom) {
       ctx.beginPath();
       ctx.arc(sxp, syp, 1.8, 0, Math.PI * 2);
       ctx.fill();
+    }
+  } else if (ambient === 'stardust') {
+    // Cosmic dust streaking past — keeps Space Mode's sky as alive as every
+    // other world's ambient layer instead of being the one static backdrop.
+    for (let i = 0; i < 16; i++) {
+      const sxp = width - ((i * 71 + distance * 0.55 + t * 90) % (width + 80)) + 40;
+      const syp = 18 + ((i * 67) % (skyBottom - 40));
+      const len = 10 + (i % 4) * 7;
+      const glow = 0.25 + 0.45 * Math.abs(Math.sin(t * 1.6 + i));
+      ctx.strokeStyle = `rgba(200,230,255,${glow})`;
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(sxp, syp);
+      ctx.lineTo(sxp + len, syp);
+      ctx.stroke();
     }
   }
 

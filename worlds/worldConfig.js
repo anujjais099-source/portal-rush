@@ -121,7 +121,7 @@
       gravityMultiplier: 0.8,
       skylineStyle: 'space',
       celestial: 'none',
-      ambient: 'none',
+      ambient: 'stardust',
       obstacleTheme: 'space',
     },
     {
