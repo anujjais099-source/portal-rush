@@ -1,8 +1,11 @@
 :root {
-  --bg: #07061a;
-  --bg-alt: #0d0b2a;
+  --bg: #0a0620;
+  --bg-alt: #140f33;
   --panel: #13113a;
-  --panel-border: #2a2568;
+  /* Translucent panel fill so the colourful backdrop reads through the UI
+     instead of being hidden behind flat dark rectangles. */
+  --panel-glass: rgba(24, 18, 62, 0.72);
+  --panel-border: #3a2f7a;
   --text: #f2f0ff;
   --text-dim: #9d97c9;
   --accent: #00f0ff;
@@ -17,11 +20,26 @@
 html, body {
   margin: 0;
   height: 100%;
-  background: var(--bg);
   color: var(--text);
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   overflow: hidden;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Colourful "portal energy" backdrop: overlapping blooms in the game's own
+   cyan / magenta / violet / gold accents over a deep base, instead of the
+   flat navy the dashboard used to sit on. Fixed attachment so the colour
+   stays put while panels scroll over it. */
+body {
+  background:
+    radial-gradient(1150px 760px at 4% -10%,  rgba(255, 47, 176, 0.62), transparent 58%),
+    radial-gradient(950px 700px at 96% -6%,   rgba(0, 225, 255, 0.55),  transparent 60%),
+    radial-gradient(1050px 800px at 10% 106%, rgba(140, 60, 255, 0.62), transparent 60%),
+    radial-gradient(920px 660px at 94% 98%,   rgba(255, 140, 40, 0.48), transparent 56%),
+    radial-gradient(820px 600px at 54% 46%,   rgba(30, 200, 190, 0.32), transparent 64%),
+    radial-gradient(700px 520px at 70% 30%,   rgba(120, 90, 255, 0.30), transparent 62%),
+    var(--bg);
+  background-attachment: fixed;
 }
 
 #app {
@@ -38,7 +56,7 @@ html, body {
   align-items: center;
   padding: 24px 16px 40px;
   overflow-y: auto;
-  background: radial-gradient(circle at 50% 0%, #1a1450 0%, var(--bg) 70%);
+  background: transparent; /* the colourful body backdrop shows through */
 }
 .screen.active { display: flex; }
 
@@ -59,7 +77,9 @@ html, body {
 
 #sidebar {
   flex: 0 0 240px;
-  background: var(--panel);
+  background: var(--panel-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-right: 1px solid var(--panel-border);
   display: flex;
   flex-direction: column;
@@ -136,7 +156,9 @@ html, body {
 
 .panel {
   width: 100%;
-  background: var(--panel);
+  background: var(--panel-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--panel-border);
   border-radius: var(--radius);
   padding: 20px;
@@ -182,7 +204,11 @@ html, body {
   position: relative;
   border-radius: var(--radius);
   overflow: hidden;
-  background: radial-gradient(circle at 50% 40%, #1a1450 0%, var(--bg) 75%);
+  background:
+    radial-gradient(circle at 50% 38%, rgba(0, 240, 255, 0.18) 0%, transparent 58%),
+    radial-gradient(circle at 78% 78%, rgba(255, 47, 176, 0.20) 0%, transparent 60%),
+    radial-gradient(circle at 22% 82%, rgba(255, 216, 61, 0.12) 0%, transparent 58%),
+    rgba(14, 9, 40, 0.66);
   border: 1px solid var(--panel-border);
   display: flex; align-items: center; justify-content: center;
   min-height: 320px;
@@ -616,6 +642,16 @@ html, body {
 }
 .stat-card-label { display: block; color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
 .stat-card-value { display: block; font-size: 1.5rem; font-weight: 800; color: var(--accent-3); }
+
+/* Blur is expensive on low-end phones and we stack a lot of panels. Drop the
+   blur on small screens but keep a more opaque fill so text stays readable. */
+@media (max-width: 900px) {
+  .panel, #sidebar {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(20, 15, 51, 0.9);
+  }
+}
 
 @media (max-width: 900px) {
   .shell.active { flex-direction: column; }
