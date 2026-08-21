@@ -98,10 +98,16 @@
             <section class="panel download-panel">
               <h3 class="panel-title">Get the Android App</h3>
               <p class="download-copy">Same game, installed on your phone. Your progress is stored on the server, so it follows you between the app and the website.</p>
+              <!-- /releases/latest/download/<asset> streams the file straight from
+                   GitHub with Content-Disposition: attachment, so this downloads the
+                   APK directly instead of opening the release page. -->
               <a id="btn-download-apk" class="btn btn-primary download-btn"
-                 href="https://github.com/anujjais099-source/portal-rush/releases/latest"
-                 target="_blank" rel="noopener">⬇ Download APK</a>
-              <p class="download-note">Android only. You'll need to allow installs from your browser the first time — Android will prompt you.</p>
+                 href="https://github.com/anujjais099-source/portal-rush/releases/latest/download/portal-rush.apk"
+                 download="portal-rush.apk">⬇ Download APK</a>
+              <p class="download-note">
+                Android only, 3.6&nbsp;MB. Your phone will ask you to allow installs from your browser the first time.
+                <a class="download-alt" href="https://github.com/anujjais099-source/portal-rush/releases/latest" target="_blank" rel="noopener">All versions</a>
+              </p>
             </section>
           </div>
         </div>

@@ -239,6 +239,8 @@ body {
 }
 .download-btn:hover { background: linear-gradient(90deg, #24a26c, #55e8aa); }
 .download-note { margin: 12px 0 0; font-size: 0.7rem; color: var(--text-dim); line-height: 1.45; }
+.download-alt { color: var(--accent); text-decoration: underline; white-space: nowrap; }
+.download-alt:hover { color: var(--text); }
 
 @media (max-width: 1024px) {
   .home-grid { grid-template-columns: 1fr; }
