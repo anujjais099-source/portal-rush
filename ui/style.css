@@ -223,6 +223,23 @@ body {
 .whats-new-item strong { font-size: 0.85rem; }
 .whats-new-item span { font-size: 0.75rem; color: var(--text-dim); }
 
+/* ---------------------------------------------------------------- Android download */
+
+.download-panel { border-color: rgba(61, 220, 151, 0.45); }
+.download-copy { margin: 0 0 14px; font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; }
+.download-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  background: linear-gradient(90deg, #1f8f5f, #3ddc97);
+  box-shadow: 0 0 22px rgba(61, 220, 151, 0.3);
+  text-decoration: none;
+}
+.download-btn:hover { background: linear-gradient(90deg, #24a26c, #55e8aa); }
+.download-note { margin: 12px 0 0; font-size: 0.7rem; color: var(--text-dim); line-height: 1.45; }
+
 @media (max-width: 1024px) {
   .home-grid { grid-template-columns: 1fr; }
   .home-hero { min-height: 220px; }

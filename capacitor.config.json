@@ -1,0 +1,11 @@
+{
+  "appId": "com.portalrush.game",
+  "appName": "Portal Rush",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}

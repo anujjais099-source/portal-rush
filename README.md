@@ -83,6 +83,23 @@ For local development with auto-restart on file changes:
 npm run dev
 ```
 
+## Android app
+
+The same client is packaged as an Android app with [Capacitor](https://capacitorjs.com). The APK is **built in CI, not locally** — GitHub's runners already have the Android SDK and JDK, so no local Android toolchain is needed.
+
+```bash
+npm run build:www     # assemble the client into www/ (same URL layout the server uses)
+npm run build:app     # build www/ pointed at the deployed server, then sync the Android project
+```
+
+- `.github/workflows/android.yml` builds a debug APK on every push to `main` and uploads it as a workflow artifact.
+- Pushing a `v*` tag additionally publishes a **GitHub Release** with `portal-rush.apk` attached. The website's *Download APK* button links to `/releases/latest`.
+- The `android/` and `www/` folders are generated during the build and are deliberately not committed.
+
+**How the app talks to the server.** The app runs from a local WebView, so it has no server of its own. `scripts/build-www.js` injects `window.PR_SERVER` with the deployed origin; `ui/api.js` and `multiplayer/client.js` prefix their REST and Socket.io calls with it, and the Express API sends permissive CORS headers so those cross-origin calls succeed. Progress is therefore shared between the app and the website — it's the same server-side profile.
+
+**The APK is debug-signed**, which is fine for sideloading from the website (Android will ask the user to allow installs from their browser once). Publishing to the Play Store would require a release keystore and an upload key, which are deliberately not in this repo.
+
 ## Deploying it publicly
 
 Portal Rush is a plain, stateful Node.js server (Express + Socket.io) — it needs a host that keeps a process running and supports WebSockets, so serverless/static hosts (Vercel, Netlify, GitHub Pages) won't work. [Render](https://render.com) is the easiest fit: free tier, native Node support, WebSockets work out of the box, and this repo already includes a `render.yaml` blueprint.

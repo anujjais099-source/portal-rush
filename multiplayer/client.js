@@ -16,7 +16,11 @@ export class MultiplayerClient {
 
   connect() {
     if (this.socket) return this.socket;
-    this.socket = window.io();
+    // On the web the server serves this page, so io() defaults to the right
+    // origin. The Android build runs from a local WebView, so it must be told
+    // the deployed server's origin explicitly (injected as window.PR_SERVER).
+    const origin = (typeof window !== 'undefined' && window.PR_SERVER) || '';
+    this.socket = origin ? window.io(origin) : window.io();
     return this.socket;
   }
 

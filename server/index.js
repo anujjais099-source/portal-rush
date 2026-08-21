@@ -28,6 +28,18 @@ const ROOT = path.join(__dirname, '..');
 const app = express();
 app.use(express.json());
 
+// The Android build runs inside a WebView served from capacitor://localhost or
+// https://localhost, so its API calls are cross-origin. Socket.io already sets
+// its own CORS; the REST API needs the same. Read-mostly public game data with
+// no cookie auth, so a permissive origin is safe here.
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+});
+
 // Static client assets. Each top-level folder maps 1:1 to a URL prefix so
 // characters/characterConfig.js and worlds/worldConfig.js can be loaded by
 // the browser with plain <script> tags, same as the UI/game/asset code.

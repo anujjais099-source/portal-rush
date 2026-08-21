@@ -6,7 +6,9 @@
   "type": "commonjs",
   "scripts": {
     "start": "node server/index.js",
-    "dev": "node --watch server/index.js"
+    "dev": "node --watch server/index.js",
+    "build:www": "node scripts/build-www.js",
+    "build:app": "node scripts/build-www.js https://portal-rush.onrender.com && npx cap sync android"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -14,6 +16,11 @@
   "dependencies": {
     "express": "^4.19.2",
     "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/cli": "^6.1.2",
+    "@capacitor/core": "^6.1.2"
   },
   "license": "MIT"
 }
